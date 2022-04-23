@@ -1,0 +1,25 @@
+name: "Create env file"
+description: "Uses function that exists in runner image"
+
+inputs:
+  filename:
+    description: "file to be created"
+    required: true
+
+  data:
+    description: "environment variables to be added MY_ENV=$(getEnv PROP_NAME)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        # create env file
+
+        shopt -s expand_aliases
+        alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
+
+        echo "
+        ${{ inputs.data }}
+        " | grep -ve '^$' > ${{ inputs.filename }}
