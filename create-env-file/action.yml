@@ -29,3 +29,5 @@ runs:
         echo "
         ${{ inputs.data }}
         " | grep -ve '^$' > ${{ inputs.filename }}
+
+        exit 0

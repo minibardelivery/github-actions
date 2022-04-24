@@ -25,3 +25,5 @@ runs:
         echo "
         ${{ inputs.data }}
         " | grep -ve '^$' >> $GITHUB_ENV
+
+        exit 0
