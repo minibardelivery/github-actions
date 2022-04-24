@@ -22,6 +22,7 @@ runs:
         shopt -s expand_aliases
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
 
+        set -x
         echo "
         ${{ inputs.data }}
         " | grep -ve '^$' >> $GITHUB_ENV
