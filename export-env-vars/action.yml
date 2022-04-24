@@ -9,7 +9,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache .env file
+    - name: Cache params
       uses: actions/cache@v3
       with:
         path: params_cache
