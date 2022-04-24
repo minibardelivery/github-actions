@@ -9,6 +9,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Cache .env file
+      uses: actions/cache@v3
+      with:
+        path: params_cache
+        key: ${{ github.run_id }}
+
     - shell: bash
       run: |
         # export vars
