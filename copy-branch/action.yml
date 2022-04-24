@@ -1,0 +1,48 @@
+name: "Create branch in origin from another branch"
+description: "Create branch in origin from another branch"
+
+inputs:
+  token:
+    description: "Personal access token (PAT) used to fetch the repository"
+    required: false
+
+  repository:
+    description: "Repository name with owner. For example, actions/checkout"
+    required: false
+
+  source_branch:
+    description: "Branch used as the source to new branch"
+    required: false
+    default: develop
+
+  target_branch:
+    description: "Name of the branch to be created"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ inputs.token }}
+        repository: $${{ inputs.repository }}
+        ref: $${{ inputs.source_branch }}
+
+    - shell: bash
+      name: create branch
+      run: |
+        # create branch
+        set -x
+        set +e
+
+        git ls-remote --exit-code --heads origin $${{ inputs.target_branch }}
+
+        [ $? -eq 0 ] && {
+          echo "env branch '$${{ inputs.target_branch }}' already exists on $(git config --get remote.origin.url)";
+        } || {
+          $(exit 0);
+          echo "creating branch '$${{ inputs.target_branch }}' on $(git config --get remote.origin.url)";
+          git checkout -b $${{ inputs.target_branch }}
+          git commit --allow-empty -m "[skip ci]"
+          git push -u origin $${{ inputs.target_branch }}
+        }
