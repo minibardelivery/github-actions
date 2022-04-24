@@ -1,0 +1,14 @@
+name: "Export Service parameters"
+description: "Export Service parameters"
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        # export parameters
+
+        shopt -s expand_aliases
+        alias initializeServiceParameters=/opt/utils/feature_env/functions/initializeServiceParameters.sh
+
+        initializeServiceParameters >> $GITHUB_ENV

@@ -1,0 +1,14 @@
+name: "Export Pipeline parameters"
+description: "Export Pipeline parameters"
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        # export parameters
+
+        shopt -s expand_aliases
+        alias initializePipelineParameters=/opt/utils/feature_env/functions/initializePipelineParameters.sh
+
+        initializePipelineParameters >> $GITHUB_ENV
