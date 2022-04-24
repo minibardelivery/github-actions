@@ -5,10 +5,12 @@ inputs:
   token:
     description: "Personal access token (PAT) used to fetch the repository"
     required: false
+    default: ${{ github.token }}
 
   repository:
     description: "Repository name with owner. For example, actions/checkout"
     required: false
+    default: ${{ github.repository }}
 
   source_branch:
     description: "Branch used as the source to new branch"
