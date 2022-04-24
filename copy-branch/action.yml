@@ -25,8 +25,8 @@ runs:
     - uses: actions/checkout@v3
       with:
         token: ${{ inputs.token }}
-        repository: $${{ inputs.repository }}
-        ref: $${{ inputs.source_branch }}
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.source_branch }}
 
     - shell: bash
       name: create branch
@@ -35,14 +35,14 @@ runs:
         set -x
         set +e
 
-        git ls-remote --exit-code --heads origin $${{ inputs.target_branch }}
+        git ls-remote --exit-code --heads origin ${{ inputs.target_branch }}
 
         [ $? -eq 0 ] && {
-          echo "env branch '$${{ inputs.target_branch }}' already exists on $(git config --get remote.origin.url)";
+          echo "env branch '${{ inputs.target_branch }}' already exists on $(git config --get remote.origin.url)";
         } || {
           $(exit 0);
-          echo "creating branch '$${{ inputs.target_branch }}' on $(git config --get remote.origin.url)";
-          git checkout -b $${{ inputs.target_branch }}
+          echo "creating branch '${{ inputs.target_branch }}' on $(git config --get remote.origin.url)";
+          git checkout -b ${{ inputs.target_branch }}
           git commit --allow-empty -m "[skip ci]"
-          git push -u origin $${{ inputs.target_branch }}
+          git push -u origin ${{ inputs.target_branch }}
         }
