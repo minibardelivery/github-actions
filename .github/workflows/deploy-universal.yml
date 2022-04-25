@@ -24,7 +24,7 @@ on:
         type: boolean
 
       REPOSITORY:
-        required: true
+        required: false
         type: string
 
     secrets:
@@ -97,7 +97,7 @@ jobs:
   deploy-tmp-folder:
     needs: parameters
     if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
-    runs-on: [self-hosted, minibar, tiny]
+    runs-on: [self-hosted, minibar, docker]
     steps:
       - uses: actions/checkout@v3
         with:
