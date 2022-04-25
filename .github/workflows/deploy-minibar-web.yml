@@ -23,6 +23,10 @@ on:
         required: true
         type: boolean
 
+      REPOSITORY:
+        required: false
+        type: string
+
     secrets:
       NPM_TOKEN:
         required: true
@@ -77,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -97,7 +101,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -118,7 +122,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -139,7 +143,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -160,7 +164,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -181,7 +185,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -202,7 +206,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -223,7 +227,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -244,7 +248,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 

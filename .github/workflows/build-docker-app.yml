@@ -26,7 +26,6 @@ on:
       REPOSITORY:
         required: false
         type: string
-        default: ${{ inputs.APPNAME }}
 
     secrets:
       NPM_TOKEN:
@@ -82,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.REPOSITORY }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -103,7 +102,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.REPOSITORY }}
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
