@@ -1,4 +1,4 @@
-name: "reusable) build-docker-app"
+name: "reusable) deploy-minibar-web"
 
 on:
   workflow_call:
@@ -24,7 +24,7 @@ on:
         type: boolean
 
       REPOSITORY:
-        required: false
+        required: true
         type: string
         default: ${{ inputs.APPNAME }}
 
@@ -75,30 +75,9 @@ jobs:
       SHOULD_BUILD: ${{ steps.parameters.outputs.SHOULD_BUILD }}
       SHOULD_DEPLOY: ${{ steps.parameters.outputs.SHOULD_DEPLOY }}
 
-  create-env-file:
+  deploy-static-contents:
     needs: parameters
-    if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
-    runs-on: [self-hosted, minibar, small]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: minibardelivery/${{ inputs.REPOSITORY }}
-          token: ${{ secrets.GIT_TOKEN }}
-          ref: ${{ inputs.GIT_BRANCH }}
-
-      - uses: ./.github/actions/create-env-file
-        with:
-          APPNAME: ${{ inputs.APPNAME }}
-          GROUP: ${{ inputs.GROUP }}
-          BRANCH: ${{ inputs.BRANCH }}
-          STAGE: ${{ inputs.STAGE }}
-          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
-
-  build-image:
-    needs:
-      - parameters
-      - create-env-file
-    if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
     runs-on: [self-hosted, minibar, docker]
     steps:
       - uses: actions/checkout@v3
@@ -107,7 +86,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
-      - uses: ./.github/actions/build-image
+      - uses: ./.github/actions/deploy-static-contents
         with:
           APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
@@ -115,5 +94,23 @@ jobs:
           STAGE: ${{ inputs.STAGE }}
           ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
           STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
-          LATEST_TAG: ${{ needs.parameters.outputs.LATEST_TAG }}
-          SHOULD_DEPLOY: ${{ needs.parameters.outputs.SHOULD_DEPLOY }}
+
+  deploy-tmp-folder:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-tmp-folder
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
