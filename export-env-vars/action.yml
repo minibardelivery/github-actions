@@ -20,7 +20,7 @@ runs:
         # export vars
 
         shopt -s expand_aliases
-        alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
+        alias getEnv=/opt/utils/feature_env/functions/getEnv.js
 
         set -x
         echo "
