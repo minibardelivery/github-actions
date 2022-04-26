@@ -50,7 +50,7 @@ env:
 
 jobs:
   parameters:
-    runs-on: [self-hosted, minibar, tiny]
+    runs-on: [self-hosted, minibar, small]
     steps:
       - uses: minibardelivery/github-actions/initialize-service-parameters@v1
 
