@@ -23,9 +23,10 @@ on:
         required: true
         type: boolean
 
-      REPOSITORY:
+      DOCKER_SIZE:
         required: false
         type: string
+        default: small
 
     secrets:
       NPM_TOKEN:
@@ -81,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
@@ -102,7 +103,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          repository: minibardelivery/${{ inputs.APPNAME }}
           token: ${{ secrets.GIT_TOKEN }}
           ref: ${{ inputs.GIT_BRANCH }}
 
