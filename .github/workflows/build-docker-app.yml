@@ -98,7 +98,7 @@ jobs:
       - parameters
       - create-env-file
     if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
-    runs-on: [self-hosted, minibar, docker]
+    runs-on: [self-hosted, minibar, docker-build]
     steps:
       - uses: actions/checkout@v3
         with:
