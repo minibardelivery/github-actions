@@ -115,7 +115,10 @@ jobs:
           STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
 
   deploy-universal:
-    needs: parameters
+    needs:
+      - parameters
+      - deploy-static-contents
+      - deploy-tmp-folder
     if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
     runs-on: [self-hosted, minibar, tiny]
     steps:
