@@ -113,3 +113,24 @@ jobs:
           STAGE: ${{ inputs.STAGE }}
           ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
           STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
+  deploy-universal:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-universal
+        with:
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
