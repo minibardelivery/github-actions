@@ -99,6 +99,9 @@ jobs:
       - create-env-file
     if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
     runs-on: [self-hosted, minibar, docker-medium]
+    env:
+      GITHUB_WORKFLOW_FILE_NAME: ${{ github.event.workflow }}
+
     steps:
       - uses: actions/checkout@v3
         with:
