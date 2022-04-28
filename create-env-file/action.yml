@@ -2,6 +2,19 @@ name: "Create env file"
 description: "Uses function that exists in runner image"
 
 inputs:
+  APPNAME:
+    description: "APPNAME"
+    required: true
+  GROUP:
+    description: "GROUP"
+    required: true
+  BRANCH:
+    description: "BRANCH"
+    required: true
+  STAGE:
+    description: "STAGE"
+    required: true
+
   filename:
     description: "file to be created"
     required: true
@@ -22,6 +35,11 @@ runs:
     - shell: bash
       run: |
         # create env file
+
+        export APPNAME=${{ inputs.APPNAME }}
+        export GROUP=${{ inputs.GROUP }}
+        export BRANCH=${{ inputs.BRANCH }}
+        export STAGE=${{ inputs.STAGE }}
 
         shopt -s expand_aliases
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh

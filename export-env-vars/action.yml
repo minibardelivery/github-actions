@@ -2,6 +2,19 @@ name: "Export vars to github context"
 description: "Export vars to github context"
 
 inputs:
+  APPNAME:
+    description: "APPNAME"
+    required: true
+  GROUP:
+    description: "GROUP"
+    required: true
+  BRANCH:
+    description: "BRANCH"
+    required: true
+  STAGE:
+    description: "STAGE"
+    required: true
+
   data:
     description: "environment variables to be added MY_ENV=$(getEnv PROP_NAME)"
     required: true
@@ -18,6 +31,11 @@ runs:
     - shell: bash
       run: |
         # export vars
+
+        export APPNAME=${{ inputs.APPNAME }}
+        export GROUP=${{ inputs.GROUP }}
+        export BRANCH=${{ inputs.BRANCH }}
+        export STAGE=${{ inputs.STAGE }}
 
         shopt -s expand_aliases
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh

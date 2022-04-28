@@ -1,0 +1,35 @@
+name: "Create branch in origin from another branch"
+description: "Create branch in origin from another branch"
+
+inputs:
+  token:
+    description: "Personal access token (PAT) used to fetch the repository"
+    required: false
+    default: ${{ github.token }}
+
+  repository:
+    description: "Repository name with owner. For example, actions/checkout"
+    required: false
+    default: ${{ github.repository }}
+
+  branch:
+    description: "Name of the branch to be removed"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ inputs.token }}
+        repository: ${{ inputs.repository }}
+
+    - shell: bash
+      name: create branch
+      run: |
+        # create branch
+        set -x
+        set +e
+
+        git push --delete origin ${{ branch }}
+        exit 0
