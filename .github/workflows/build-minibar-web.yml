@@ -43,6 +43,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+  APPNAME: ${{ inputs.APPNAME }}
   GROUP: ${{ inputs.GROUP }}
   BRANCH: ${{ inputs.BRANCH }}
   STAGE: ${{ inputs.STAGE }}
@@ -51,7 +52,6 @@ jobs:
   parameters:    
     runs-on: [self-hosted, minibar, small]
     env:
-      APPNAME: ${{ inputs.APPNAME }}
       ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
     steps:
       - uses: minibardelivery/github-actions/initialize-service-parameters@v1
