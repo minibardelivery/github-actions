@@ -23,9 +23,9 @@ runs:
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
         alias getBuildArgs=/opt/utils/feature_env/functions/getBuildArgs.sh
 
-        (grep -ve '^[[:space:]]*$' <<EOF
+        set -x
+        echo "
         ${{ inputs.data }}
-        EOF
-        ) >> $GITHUB_ENV
+        " | grep -ve '^$' >> $GITHUB_ENV
 
         exit 0
