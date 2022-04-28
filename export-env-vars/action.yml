@@ -24,8 +24,14 @@ runs:
         alias getBuildArgs=/opt/utils/feature_env/functions/getBuildArgs.sh
 
         set -x
-        echo "
+        eval "$((grep -ve '^[[:space:]]*$' <<EOF
         ${{ inputs.data }}
-        " | grep -ve '^$' >> $GITHUB_ENV
+        EOF
+        ) | xargs -I {} echo "export \"{}\"")"
+
+        (grep -ve '^[[:space:]]*$' <<EOF
+        ${{ inputs.data }}
+        EOF
+        ) >> $GITHUB_ENV
 
         exit 0

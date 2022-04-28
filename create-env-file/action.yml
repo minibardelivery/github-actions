@@ -26,8 +26,9 @@ runs:
         shopt -s expand_aliases
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
 
-        echo "
+        (grep -ve '^[[:space:]]*$' <<EOF
         ${{ inputs.data }}
-        " | grep -ve '^$' > ${{ inputs.filename }}
+        EOF
+        ) > ${{ inputs.filename }}
 
         exit 0
