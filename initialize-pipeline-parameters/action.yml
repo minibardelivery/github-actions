@@ -1,31 +1,12 @@
 name: "Export Pipeline parameters"
 description: "Export Pipeline parameters"
 
-inputs:
-  APPNAME:
-    description: "APPNAME"
-    required: true
-  GROUP:
-    description: "GROUP"
-    required: true
-  BRANCH:
-    description: "BRANCH"
-    required: true
-  STAGE:
-    description: "STAGE"
-    required: true
-
 runs:
   using: "composite"
   steps:
     - shell: bash
       run: |
         # export parameters
-
-        export APPNAME=${{ inputs.APPNAME }}
-        export GROUP=${{ inputs.GROUP }}
-        export BRANCH=${{ inputs.BRANCH }}
-        export STAGE=${{ inputs.STAGE }}
 
         shopt -s expand_aliases
         alias initializePipelineParameters=/opt/utils/feature_env/functions/initializePipelineParameters.sh
