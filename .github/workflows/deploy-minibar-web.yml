@@ -108,6 +108,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -129,6 +130,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -150,6 +152,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_background
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -171,6 +174,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_image_processing
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -192,6 +196,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_important
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -213,6 +218,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_inventory
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -234,6 +240,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_invoicing
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
@@ -255,6 +262,7 @@ jobs:
 
       - uses: ./.github/actions/deploy-minibar-web_sidekiq_reindex
         with:
+          APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
           BRANCH: ${{ inputs.BRANCH }}
           STAGE: ${{ inputs.STAGE }}
