@@ -21,6 +21,7 @@ runs:
 
         shopt -s expand_aliases
         alias getEnv=/opt/utils/feature_env/functions/getEnv.sh
+        alias getBuildArgs=/opt/utils/feature_env/functions/getBuildArgs.sh
 
         set -x
         echo "
