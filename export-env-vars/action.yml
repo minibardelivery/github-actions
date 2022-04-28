@@ -43,6 +43,10 @@ runs:
 
         set -x
         echo "
+        APPNAME=${{ inputs.APPNAME }}
+        GROUP=${{ inputs.GROUP }}
+        BRANCH=${{ inputs.BRANCH }}
+        STAGE=${{ inputs.STAGE }}
         ${{ inputs.data }}
         " | grep -ve '^$' >> $GITHUB_ENV
 
