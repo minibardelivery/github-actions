@@ -119,3 +119,4 @@ jobs:
           STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
           LATEST_TAG: ${{ needs.parameters.outputs.LATEST_TAG }}
           SHOULD_DEPLOY: ${{ needs.parameters.outputs.SHOULD_DEPLOY }}
+          ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
