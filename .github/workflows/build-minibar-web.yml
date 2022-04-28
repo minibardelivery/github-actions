@@ -44,7 +44,7 @@ jobs:
     env:
       ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
     steps:
-      - uses: minibardelivery/github-actions/initialize-service-parameters@v1
+      - uses: minibardelivery/github-actions/initialize-service-parameters@v2
         with:
           APPNAME: ${{ inputs.APPNAME }}
           GROUP: ${{ inputs.GROUP }}
