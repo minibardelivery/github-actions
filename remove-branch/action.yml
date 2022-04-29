@@ -25,11 +25,10 @@ runs:
         repository: ${{ inputs.repository }}
 
     - shell: bash
-      name: create branch
       run: |
-        # create branch
+        # remove branch
         set -x
         set +e
 
-        git push --delete origin ${{ branch }}
+        git push --delete origin ${{ inputs.branch }}
         exit 0
