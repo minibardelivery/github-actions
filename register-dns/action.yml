@@ -1,5 +1,5 @@
-name: "Create env file"
-description: "Uses function that exists in runner image"
+name: "Register dns"
+description: "Register dns entry in CF"
 
 inputs:
   APPNAME:
