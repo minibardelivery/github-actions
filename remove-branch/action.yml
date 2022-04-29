@@ -34,4 +34,5 @@ runs:
         GIT_BRANCH=$(echo "env/${{ inputs.STAGE }}" | tr '[:upper:]' '[:lower:]')
 
         git push --delete origin $GIT_BRANCH
+        git push -d $(git tag -l "${{ inputs.STAGE }}*")
         exit 0
