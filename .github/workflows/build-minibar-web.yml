@@ -42,7 +42,7 @@ jobs:
   parameters:    
     runs-on: [self-hosted, minibar, small]
     env:
-      ENV_EXISTS: ${{ inputs.ENV_EXISTS == 'true' && 'YES' || 'NO' }}
+      ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
     steps:
       - uses: minibardelivery/github-actions/initialize-service-parameters@v2
         with:
