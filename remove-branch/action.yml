@@ -12,8 +12,8 @@ inputs:
     required: false
     default: ${{ github.repository }}
 
-  branch:
-    description: "Name of the branch to be removed"
+  STAGE:
+    description: "STAGE"
     required: true
 
 runs:
@@ -30,5 +30,7 @@ runs:
         set -x
         set +e
 
-        git push --delete origin ${{ inputs.branch }}
+        [ -z "${{ inputs.STAGE }}" ] && { echo "STAGE is required"; exit 1; }
+
+        git push --delete origin env/${{ inputs.STAGE }}
         exit 0
