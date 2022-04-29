@@ -1,0 +1,48 @@
+name: "Register dns"
+description: "Register dns entry in CF"
+
+inputs:
+  ECR_REGISTRY_ONLY:
+    description: "ECR_REGISTRY_ONLY"
+    required: true
+  ECR_REGISTRY_WITH_SERVICE:
+    description: "ECR_REGISTRY_WITH_SERVICE"
+    required: true
+  STAGE_TAG:
+    description: "STAGE_TAG"
+    required: true
+  LATEST_TAG:
+    description: "LATEST_TAG"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: us-east-1
+
+    - uses: imjasonh/setup-crane@v0.1
+
+    - shell: bash
+      run: |
+        # Push images
+
+        crane auth login ${{ inputs.ECR_REGISTRY_ONLY }} -u AWS -p $(aws ecr get-login-password)
+
+        set -x
+        crane push /buildkit/${{ github.run_id }}/image.tar ${{ inputs.ECR_REGISTRY_WITH_SERVICE }}:${{ inputs.STAGE_TAG }}
+        crane push /buildkit/${{ github.run_id }}/image.tar ${{ inputs.ECR_REGISTRY_WITH_SERVICE }}:${{ inputs.LATEST_TAG }}
+
+        git tag -a ${{ inputs.LATEST_TAG }} -f
+        git push -f --tags
+
+
+    - if: always()
+      shell: bash
+      run: |
+        # Cleanup buildkit volume
+        set -x
+
+        rm -Rf /buildkit/${{ github.run_id }};
+       
