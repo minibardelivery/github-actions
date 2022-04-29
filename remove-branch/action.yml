@@ -31,6 +31,7 @@ runs:
         set +e
 
         [ -z "${{ inputs.STAGE }}" ] && { echo "STAGE is required"; exit 1; }
+        GIT_BRANCH=$(echo "env/${{ inputs.STAGE }}" | tr '[:upper:]' '[:lower:]'))
 
-        git push --delete origin env/${{ inputs.STAGE }}
+        git push --delete origin $GIT_BRANCH
         exit 0
