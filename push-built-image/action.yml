@@ -34,7 +34,12 @@ runs:
         crane push /buildkit/${{ github.run_id }}/image.tar ${{ inputs.ECR_REGISTRY_WITH_SERVICE }}:${{ inputs.STAGE_TAG }}
         crane push /buildkit/${{ github.run_id }}/image.tar ${{ inputs.ECR_REGISTRY_WITH_SERVICE }}:${{ inputs.LATEST_TAG }}
 
-        git tag -a ${{ inputs.LATEST_TAG }} -f
+        SHA=$(git rev-parse HEAD)
+
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+        git tag -fa "${{ inputs.LATEST_TAG }}" "$SHA"
         git push -f --tags
 
 
