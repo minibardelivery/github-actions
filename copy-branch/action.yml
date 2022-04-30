@@ -44,7 +44,8 @@ runs:
         } || {
           $(exit 0);
           echo "creating branch '${{ inputs.target_branch }}' on $(git config --get remote.origin.url)";
-          git checkout -b ${{ inputs.target_branch }}
+          git fetch origin --tags -f
+          git checkout tags/"${{ inputs.source_branch }}-latest" -b ${{ inputs.target_branch }}
           git commit --allow-empty -m "[skip ci]"
           git push -u origin ${{ inputs.target_branch }}
         }
