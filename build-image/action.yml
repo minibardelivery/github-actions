@@ -30,12 +30,15 @@ runs:
         rm -Rf /buildkit/${{ github.run_id }}
         mkdir -p /buildkit/${{ github.run_id }}
 
-    - uses: actions/checkout@v3
-      with:
-        repository: ${{ env.GIT_REPOSITORY }}
-        token: ${{ env.GIT_TOKEN }}
-        ref: ${{ env.GIT_BRANCH }}
-        path: /buildkit/${{ github.run_id }}
+    - shell: bash
+      run: |
+        # Checkout specific branch
+        git clone \
+          -b "${{ env.GIT_BRANCH || github.sha }}" \
+           --single-branch \
+           --depth 1 \
+           https://$${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
+           "/buildkit/${{ github.run_id }}"
 
     - shell: bash
       name: create branch
