@@ -101,7 +101,7 @@ jobs:
     if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
     runs-on: [self-hosted, minibar, docker-medium]
     env:
-      GIT_REPOSITORY: minibardelivery/${{ inputs.APPNAME }}
+      GIT_REPOSITORY: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       GIT_BRANCH: ${{ inputs.GIT_BRANCH }}
       GITHUB_WORKFLOW_FILE_NAME: ${{ github.event.workflow }}
