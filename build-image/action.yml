@@ -44,7 +44,7 @@ runs:
         set -x
 
         BUILD_ARGS=$(echo "
-        ${{ buildArgs }}
+        ${{ inputs.buildArgs }}
         " | grep -ve '^$' | xargs -I {} echo "--opt build-args:{} ")
 
 
