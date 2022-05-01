@@ -101,14 +101,17 @@ jobs:
     if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
     runs-on: [self-hosted, minibar, docker-medium]
     env:
+      GIT_REPOSITORY: minibardelivery/${{ inputs.APPNAME }}
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      GIT_BRANCH: ${{ inputs.GIT_BRANCH }}
       GITHUB_WORKFLOW_FILE_NAME: ${{ github.event.workflow }}
 
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
-          token: ${{ secrets.GIT_TOKEN }}
-          ref: ${{ inputs.GIT_BRANCH }}
+          repository: ${{ env.GIT_REPOSITORY }}
+          token: ${{ env.GIT_TOKEN }}
+          ref: ${{ env.GIT_BRANCH }}
 
       - uses: ./.github/actions/build-image
         with:
