@@ -51,14 +51,13 @@ runs:
       name: create branch
       run: |
         # Build Image
-        set -x
 
         BUILD_ARGS=$(echo "
         ${{ inputs.buildArgs }}
         " | grep -ve '^$' | xargs -I {} echo "--opt build-args:{} ")
 
 
-        COMMAND="docker run \
+        COMMAND=$(echo "docker run \
             --rm \
             -v buildkit:/buildkit \
             --entrypoint buildctl-daemonless.sh \
@@ -75,6 +74,7 @@ runs:
                 --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
                 --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:develop-buildcache,mode=max\" \
                 --export-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
-                --output \"type=oci,dest=/buildkit/${{ github.run_id }}/image.tar\""
+                --output \"type=oci,dest=/buildkit/${{ github.run_id }}/image.tar\"")
 
+        set -x
         bash -c "$COMMAND"
