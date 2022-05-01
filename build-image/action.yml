@@ -29,6 +29,7 @@ runs:
 
         rm -Rf /buildkit/${{ github.run_id }}
         mkdir -p /buildkit/${{ github.run_id }}
+        chmod 777 /buildkit/${{ github.run_id }}
 
     - shell: bash
       run: |
