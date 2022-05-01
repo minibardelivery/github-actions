@@ -33,6 +33,8 @@ runs:
     - shell: bash
       run: |
         # Checkout specific branch
+        set -x
+    
         git clone \
           -b "${{ env.GIT_BRANCH || github.ref_name }}" \
            --single-branch \
@@ -41,7 +43,7 @@ runs:
            "/buildkit/${{ github.run_id }}"
         
         [ -z "${{ env.GIT_BRANCH }}" ] && {
-          cd /buildkit/${{ github.run_id }};
+          cd "/buildkit/${{ github.run_id }}";
           git checkout "$${{ github.sha }}";
         }
 
