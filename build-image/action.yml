@@ -34,11 +34,16 @@ runs:
       run: |
         # Checkout specific branch
         git clone \
-          -b "${{ env.GIT_BRANCH || github.ref }}" \
+          -b "${{ env.GIT_BRANCH || github.ref_name }}" \
            --single-branch \
            --depth 1 \
            https://$${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
            "/buildkit/${{ github.run_id }}"
+        
+        [ -z "${{ env.GIT_BRANCH }}" ] && {
+          cd /buildkit/${{ github.run_id }};
+          git checkout "$${{ github.sha }}";
+        }
 
     - shell: bash
       name: create branch
