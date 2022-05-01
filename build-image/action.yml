@@ -34,7 +34,7 @@ runs:
       run: |
         # Checkout specific branch
         git clone \
-          -b "${{ env.GIT_BRANCH || github.sha }}" \
+          -b "${{ env.GIT_BRANCH || github.ref }}" \
            --single-branch \
            --depth 1 \
            https://$${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
