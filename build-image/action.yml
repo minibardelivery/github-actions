@@ -14,9 +14,6 @@ inputs:
   STAGE:
     description: "STAGE"
     required: true
-  ENV_EXISTS:
-    description: "ENV_EXISTS"
-    required: true
   
   buildArgs:
     required: true
@@ -58,9 +55,7 @@ runs:
 
         BUILD_ARGS=$(echo "
         ${{ inputs.buildArgs }}
-        " | grep -ve '^$' | xargs -I {} echo "--opt build-args:{} " | tr -d '\n')
-
-        IMPORT_CACHE_FROM=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.ENV_EXISTS == 'YES' && inputs.STAGE || 'develop' }}-buildcache
+        " | grep -ve '^$' | xargs -I {} echo "--opt build-arg:{} " | tr -d '\n')
 
         COMMAND="docker run \
             --rm \
@@ -75,7 +70,8 @@ runs:
                 --local context=/buildkit/${{ github.run_id }}/context \
                 --local dockerfile=/buildkit/${{ github.run_id }}/context/.ci/build \
                 $BUILD_ARGS \
-                --import-cache "type=registry,ref=$IMPORT_CACHE_FROM,mode=max" \
+                --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
+                --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:develop-buildcache,mode=max\" \
                 --export-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
                 --output \"type=oci,dest=/buildkit/${{ github.run_id }}/image.tar\""
 
