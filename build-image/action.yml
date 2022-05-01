@@ -1,0 +1,70 @@
+name: "Build image"
+description: "Build image using buildkit"
+
+inputs:
+  APPNAME:
+    description: "APPNAME"
+    required: true
+  GROUP:
+    description: "GROUP"
+    required: true
+  BRANCH:
+    description: "BRANCH"
+    required: true
+  STAGE:
+    description: "STAGE"
+    required: true
+  
+  buildArgs:
+    required: true
+    description: "Build args to send to buildkit"
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        # Clean up buildkit folder
+        set -x
+
+        rm -Rf /buildkit/${{ github.run_id }}
+        mkdir -p /buildkit/${{ github.run_id }}
+
+    - uses: actions/checkout@v3
+      with:
+        repository: ${{ env.GIT_REPOSITORY }}
+        token: ${{ env.GIT_TOKEN }}
+        ref: ${{ env.GIT_BRANCH }}
+        path: /buildkit/${{ github.run_id }}
+
+    - shell: bash
+      name: create branch
+      run: |
+        # Build Image
+        set -x
+
+        BUILD_ARGS=$(echo "
+        ${{ buildArgs }}
+        " | grep -ve '^$' | xargs -I {} echo "--opt build-args:{} ")
+
+
+        COMMAND="docker run \
+            --rm \
+            -v buildkit:/buildkit \
+            --entrypoint buildctl-daemonless.sh \
+            --security-opt seccomp=unconfined \
+            --security-opt apparmor=unconfined \
+            -e BUILDKITD_FLAGS=--oci-worker-no-process-sandbox \
+            moby/buildkit:master-rootless \
+                build \
+                --frontend dockerfile.v0 \
+                --local context=/buildkit/${{ github.run_id }}/context \
+                --local dockerfile=/buildkit/${{ github.run_id }}/context/.ci/build \
+                $BUILD_ARGS \
+                --opt build-arg:BUNDLE_RUBYGEMS__PKG__GITHUB__COM=${{ env.BUNDLE_RUBYGEMS__PKG__GITHUB__COM }} \
+                --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
+                --import-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:develop-buildcache,mode=max\" \
+                --export-cache \"type=registry,ref=github-registry.minibardelivery.com/${{ inputs.APPNAME }}:${{ inputs.STAGE }}-buildcache,mode=max\" \
+                --output \"type=oci,dest=/buildkit/${{ github.run_id }}/image.tar\""
+
+        bash -c "$COMMAND"
