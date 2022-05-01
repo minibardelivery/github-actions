@@ -34,6 +34,7 @@ runs:
     - shell: bash
       run: |
         # Checkout specific branch
+        set +e
         set -x
     
         git clone \
@@ -47,6 +48,8 @@ runs:
           cd "/buildkit/${{ github.run_id }}/context";
           git checkout "${{ github.sha }}";
         }
+
+        exit 0
 
     - shell: bash
       name: create branch
