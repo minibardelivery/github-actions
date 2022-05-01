@@ -44,7 +44,7 @@ runs:
            "/buildkit/${{ github.run_id }}/context"
         
         [ -z "${{ env.GIT_BRANCH }}" ] && {
-          cd "/buildkit/${{ github.run_id }}";
+          cd "/buildkit/${{ github.run_id }}/context";
           git checkout "${{ github.sha }}";
         }
 
