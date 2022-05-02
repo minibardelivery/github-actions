@@ -38,7 +38,7 @@ runs:
         set -x
     
         git clone \
-          -b "${{ env.GIT_BRANCH || github.ref_name }}" \
+          -b "${{ env.GIT_BRANCH || github.base_ref || github.ref_name }}" \
            --single-branch \
            --depth 1 \
            https://${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
