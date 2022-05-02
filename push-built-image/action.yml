@@ -35,7 +35,7 @@ runs:
         crane push /buildkit/${{ github.run_id }}/image.tar ${{ inputs.ECR_REGISTRY_WITH_SERVICE }}:${{ inputs.LATEST_TAG }}
 
         set +e
-        [ ! -z "$GITHUB_HEAD_REF" ] && {
+        [ -z "$GITHUB_HEAD_REF" ] && {
           SHA=$(git rev-parse HEAD)
 
           git config user.name "${GITHUB_ACTOR}"
