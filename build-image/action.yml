@@ -41,7 +41,7 @@ runs:
           -b "${{ env.GIT_BRANCH || github.ref_name }}" \
            --single-branch \
            --depth 1 \
-           https://$${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
+           https://${{ github.actor }}:${{ env.GIT_TOKEN || github.token }}@github.com/${{ env.GIT_REPOSITORY }}.git \
            "/buildkit/${{ github.run_id }}/context"
         
         [ -z "${{ env.GIT_BRANCH }}" ] && {
