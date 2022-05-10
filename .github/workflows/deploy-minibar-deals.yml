@@ -1,0 +1,120 @@
+name: "reusable) deploy-minibar-deals"
+
+on:
+  workflow_call:
+    inputs:
+      APPNAME:
+        required: true
+        type: string
+      GROUP:
+        required: true
+        type: string
+      BRANCH:
+        required: true
+        type: string
+      STAGE:
+        required: true
+        type: string
+
+      GIT_BRANCH:
+        required: true
+        type: string
+      ENV_EXISTS:
+        required: true
+        type: boolean
+
+      REPOSITORY:
+        required: false
+        type: string
+
+    secrets:
+      NPM_TOKEN:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      GIT_TOKEN:
+        required: true
+
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  parameters:
+    runs-on: [self-hosted, minibar, tiny]
+    env:
+      ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
+    steps:
+      - uses: minibardelivery/github-actions/initialize-service-parameters@v2
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+
+      - id: parameters
+        run: |
+          set -x
+          echo "::set-output name=ECR_REGISTRY::$(echo $ECR_REGISTRY)"
+          echo "::set-output name=STAGE_TAG::$(echo $STAGE_TAG)"
+          echo "::set-output name=LATEST_TAG::$(echo $LATEST_TAG)"
+          echo "::set-output name=ENV_FILE::$(echo $ENV_FILE)"
+          echo "::set-output name=SERVICE_NAME::$(echo $SERVICE_NAME)"
+          echo "::set-output name=SHOULD_BUILD::$(echo $SHOULD_BUILD)"
+          echo "::set-output name=SHOULD_DEPLOY::$(echo $SHOULD_DEPLOY)"
+
+    outputs:
+      ECR_REGISTRY: ${{ steps.parameters.outputs.ECR_REGISTRY }}
+      STAGE_TAG: ${{ steps.parameters.outputs.STAGE_TAG }}
+      LATEST_TAG: ${{ steps.parameters.outputs.LATEST_TAG }}
+      ENV_FILE: ${{ steps.parameters.outputs.ENV_FILE }}
+      SERVICE_NAME: ${{ steps.parameters.outputs.SERVICE_NAME }}
+      SHOULD_BUILD: ${{ steps.parameters.outputs.SHOULD_BUILD }}
+      SHOULD_DEPLOY: ${{ steps.parameters.outputs.SHOULD_DEPLOY }}
+
+  deploy-minibar-deals:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-minibar-deals
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
+  deploy-minibar-deals_sidekiq:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-minibar-deals_sidekiq
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
