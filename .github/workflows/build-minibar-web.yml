@@ -101,6 +101,7 @@ jobs:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       GIT_BRANCH: ${{ inputs.GIT_BRANCH }}
       GITHUB_WORKFLOW_FILE_NAME: ${{ github.event.workflow }}
+      ENV_EXISTS: ${{ inputs.ENV_EXISTS && 'YES' || 'NO' }}
 
     steps:
       - uses: actions/checkout@v3
