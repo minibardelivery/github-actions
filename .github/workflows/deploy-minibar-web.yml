@@ -270,3 +270,69 @@ jobs:
           SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
           ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
           STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
+  deploy-minibar-web_racecar_addresses:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-minibar-web_racecar_addresses
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
+  deploy-minibar-web_racecar_registered_accounts:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-minibar-web_racecar_registered_accounts
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
+  deploy-minibar-web_racecar_salsify_products:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-minibar-web_racecar_salsify_products
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ENV_FILE: ${{ needs.parameters.outputs.ENV_FILE }}
+          SERVICE_NAME: ${{ needs.parameters.outputs.SERVICE_NAME }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
