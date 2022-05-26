@@ -75,6 +75,26 @@ jobs:
       SHOULD_BUILD: ${{ steps.parameters.outputs.SHOULD_BUILD }}
       SHOULD_DEPLOY: ${{ steps.parameters.outputs.SHOULD_DEPLOY }}
 
+  db-migrations:
+    needs: parameters
+    if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
+    runs-on: [self-hosted, minibar, docker-tiny]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: minibardelivery/${{ inputs.REPOSITORY || inputs.APPNAME }}
+          token: ${{ secrets.GIT_TOKEN }}
+          ref: ${{ inputs.GIT_BRANCH }}
+
+      - uses: ./.github/actions/deploy-db-migrations
+        with:
+          APPNAME: ${{ inputs.APPNAME }}
+          GROUP: ${{ inputs.GROUP }}
+          BRANCH: ${{ inputs.BRANCH }}
+          STAGE: ${{ inputs.STAGE }}
+          ECR_REGISTRY: ${{ needs.parameters.outputs.ECR_REGISTRY }}
+          STAGE_TAG: ${{ needs.parameters.outputs.STAGE_TAG }}
+
   deploy-inventory-import:
     needs: parameters
     if: ${{ needs.parameters.outputs.SHOULD_DEPLOY == 'YES' }}
