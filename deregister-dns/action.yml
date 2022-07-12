@@ -1,0 +1,36 @@
+name: "Deregister dns"
+description: "Deregister dns entry in CF"
+
+inputs:
+  APPNAME:
+    description: "APPNAME"
+    required: true
+  GROUP:
+    description: "GROUP"
+    required: true
+  BRANCH:
+    description: "BRANCH"
+    required: true
+  STAGE:
+    description: "STAGE"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache params
+      uses: actions/cache@v3
+      with:
+        path: params_cache
+        key: ${{ github.run_id }}
+
+    - shell: bash
+      run: |
+        # deregister dns CNAME entry
+
+        export APPNAME=${{ inputs.APPNAME }}
+        export GROUP=${{ inputs.GROUP }}
+        export BRANCH=${{ inputs.BRANCH }}
+        export STAGE=${{ inputs.STAGE }}
+
+        /opt/utils/feature_env/functions/removeDNS.sh
