@@ -95,7 +95,7 @@ jobs:
       - parameters
       - create-env-file
     if: ${{ needs.parameters.outputs.SHOULD_BUILD == 'YES' }}
-    runs-on: [self-hosted, minibar, docker-small]
+    runs-on: [self-hosted, minibar, docker-medium]
     env:
       GIT_REPOSITORY: minibardelivery/${{ inputs.APPNAME }}
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
