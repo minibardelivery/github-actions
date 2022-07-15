@@ -21,7 +21,7 @@ runs:
     - name: Cache params
       uses: actions/cache@v3
       with:
-        path: /${{ github.workspace }}/${{ github.repository }}/params_cache
+        path: ${{ github.workspace }}/params_cache
         key: ${{ github.run_id }}
 
     - shell: bash
